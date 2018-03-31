@@ -5,6 +5,46 @@ const { signJwt } = require('../services/jwt')
 
 const router = express.Router()
 
+router.post('/create-admin', (req, res, next) => {
+  const { email, username, password } = req.body
+
+  if (email && username && password) {
+    const userData = {
+      email,
+      username,
+      password,
+      role: 'admin',
+    }
+    return User.count({
+      $or: [
+        { email },
+        { username },
+      ],
+    }).exec().then(num => {
+      if (num > 0) {
+        const error = new Error('Duplicate user')
+        error.status = 400
+        return next(error)
+      }
+      User.create(userData, (err, user) => {
+        if (err) {
+          return next(err)
+        }
+
+        const token = signJwt(user)
+        res.json({
+          success: true,
+          token,
+        })
+      })
+    }).catch(next)
+  }
+
+  const error = new Error('All fields required')
+  error.status = 400
+  return next(error)
+})
+
 router.post('/signup', (req, res, next) => {
   const { email, username, password } = req.body
 
@@ -25,7 +65,10 @@ router.post('/signup', (req, res, next) => {
         error.status = 400
         return next(error)
       }
-      User.create(userData).exec().then(user => {
+      User.create(userData, (err, user) => {
+        if (err) {
+          return next(err)
+        }
         const token = signJwt(user)
         res.json({
           success: true,
@@ -43,7 +86,11 @@ router.post('/signup', (req, res, next) => {
 router.post('/login', (req, res, next) => {
   const { email, password } = req.body
   if (email && password) {
-    return User.authenticate(email, password).exec().then(user => {
+    return User.authenticate(email, password, (error, user) => {
+      if (error) {
+        return next(error)
+      }
+
       if (!user) {
         const error = new Error('Wrong email or password')
         error.status = 401
@@ -54,7 +101,7 @@ router.post('/login', (req, res, next) => {
         success: true,
         token,
       })
-    }).catch(next)
+    })
   }
 
   const error = new Error('All fields required')

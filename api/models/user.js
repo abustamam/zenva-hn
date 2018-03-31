@@ -16,6 +16,11 @@ const UserSchema = new Schema({
     required: true,
     trim: true,
   },
+  role: {
+    type: String,
+    required: true,
+    default: 'user',
+  },
   password: {
     type: String,
     required: true,

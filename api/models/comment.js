@@ -12,6 +12,8 @@ const CommentSchema = new Schema({
     required: true,
     ref: 'User',
   },
+  upVotes: [],
+  downVotes: [],
   post: {
     type: Schema.Types.ObjectId,
     required: true,
@@ -22,6 +24,10 @@ const CommentSchema = new Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
   },
+})
+
+CommentSchema.virtual('voteScore').get(function () {
+  return this.upVotes - this.downVotes
 })
 
 const Comment = mongoose.model('Comment', CommentSchema)

@@ -4,8 +4,8 @@
   "description": "",
   "main": "app.js",
   "scripts": {
-    "dev": "nodemon .",
-    "start": "node ."
+    "dev": "JWT_SECRET=zenvarocks nodemon .",
+    "start": "JWT_SECRET=zenvarocks node ."
   },
   "keywords": [],
   "author": "",

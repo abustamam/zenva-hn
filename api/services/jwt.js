@@ -1,7 +1,5 @@
 const jwt = require('jsonwebtoken')
 
-const config = require('./../config')
-
 const jwtSecret = process.env.JWT_SECRET
 
 const authJwt = (req, res, next) => {
@@ -24,7 +22,10 @@ const authJwt = (req, res, next) => {
   return res.status(403).send({ success: false, message: 'No token provided' })
 }
 
-const signJwt = user => jwt.sign({ userId: user._id }, jwtSecret, { expiresIn: '1d' })
+const signJwt = user => jwt.sign({
+  userId: user._id,
+  role: user.role,
+}, jwtSecret, { expiresIn: '1d' })
 
 module.exports = {
   authJwt,

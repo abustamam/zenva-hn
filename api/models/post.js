@@ -15,6 +15,12 @@ const PostSchema = new Schema({
     type: Schema.Types.ObjectId,
     ref: 'Comment',
   }],
+  upVotes: [{
+    type: String,
+  }],
+  downVotes: [{
+    type: String,
+  }],
   url: {
     type: String,
     trim: true,
@@ -28,6 +34,10 @@ const PostSchema = new Schema({
     createdAt: 'createdAt',
     updatedAt: 'updatedAt',
   },
+})
+
+PostSchema.virtual('voteScore').get(function () {
+  return this.upVotes.length - this.downVotes.length
 })
 
 const Post = mongoose.model('Post', PostSchema)
