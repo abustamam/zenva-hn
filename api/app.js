@@ -23,9 +23,9 @@ app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(morgan('dev'))
 
-app.use('/auth', auth)
-app.use('/posts', post)
-app.use('/comments', comment)
+app.use('/api/auth', auth)
+app.use('/api/posts', post)
+app.use('/api/comments', comment)
 
 app.use((req, res, next) => {
   const err = new Error('File Not found')

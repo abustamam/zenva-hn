@@ -4,39 +4,37 @@ const uuid = require('uuid/v4')
 const Schema = mongoose.Schema
 
 const UserSchema = new Schema({
-  email: {
-    type: String,
-    unique: true,
-    required: true,
-    trim: true,
-  },
   username: {
     type: String,
     unique: true,
     required: true,
-    trim: true,
+    trim: true
   },
   role: {
     type: String,
     required: true,
-    default: 'user',
+    default: 'user'
   },
   password: {
     type: String,
-    required: true,
+    required: true
   },
-  posts: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Post',
-  }],
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Comment',
-  }],
+  posts: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Post'
+    }
+  ],
+  comments: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Comment'
+    }
+  ]
 })
 
-UserSchema.statics.authenticate = (email, password, cb) => {
-  User.findOne({ email }).exec((err, user) => {
+UserSchema.statics.authenticate = (username, password, cb) => {
+  User.findOne({ username }).exec((err, user) => {
     if (err) {
       return cb(err)
     }

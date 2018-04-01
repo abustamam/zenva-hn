@@ -1,42 +1,51 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const PostSchema = new Schema({
-  title: {
-    type: String,
-    required: true,
-    trim: true,
+const PostSchema = new Schema(
+  {
+    title: {
+      type: String,
+      required: true,
+      trim: true
+    },
+    author: {
+      type: Schema.Types.ObjectId,
+      ref: 'User'
+    },
+    comments: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Comment'
+      }
+    ],
+    upVotes: [
+      {
+        type: String
+      }
+    ],
+    downVotes: [
+      {
+        type: String
+      }
+    ],
+    url: {
+      type: String,
+      trim: true
+    },
+    text: {
+      type: String,
+      trim: true
+    }
   },
-  author: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-  },
-  comments: [{
-    type: Schema.Types.ObjectId,
-    ref: 'Comment',
-  }],
-  upVotes: [{
-    type: String,
-  }],
-  downVotes: [{
-    type: String,
-  }],
-  url: {
-    type: String,
-    trim: true,
-  },
-  text: {
-    type: String,
-    trim: true,
-  },
-}, {
-  timestamps: {
-    createdAt: 'createdAt',
-    updatedAt: 'updatedAt',
-  },
-})
+  {
+    timestamps: {
+      createdAt: 'createdAt',
+      updatedAt: 'updatedAt'
+    }
+  }
+)
 
-PostSchema.virtual('voteScore').get(function () {
+PostSchema.virtual('voteScore').get(function() {
   return this.upVotes.length - this.downVotes.length
 })
 

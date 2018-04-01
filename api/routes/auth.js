@@ -1,43 +1,40 @@
 const express = require('express')
 
 const User = require('../models/user')
-const { signJwt } = require('../services/jwt')
+const { signJwt, verifyJwt } = require('../services/jwt')
 
 const router = express.Router()
 
 router.post('/create-admin', (req, res, next) => {
-  const { email, username, password } = req.body
-
-  if (email && username && password) {
+  const { username, password } = req.body
+  if (username && password) {
     const userData = {
-      email,
       username,
       password,
-      role: 'admin',
+      role: 'admin'
     }
-    return User.count({
-      $or: [
-        { email },
-        { username },
-      ],
-    }).exec().then(num => {
-      if (num > 0) {
-        const error = new Error('Duplicate user')
-        error.status = 400
-        return next(error)
-      }
-      User.create(userData, (err, user) => {
-        if (err) {
-          return next(err)
+    return User.count({ username })
+      .exec()
+      .then(num => {
+        if (num > 0) {
+          const error = new Error('Duplicate user')
+          error.status = 400
+          return next(error)
         }
+        User.create(userData, (err, user) => {
+          if (err) {
+            return next(err)
+          }
 
-        const token = signJwt(user)
-        res.json({
-          success: true,
-          token,
+          const token = signJwt(user)
+          res.json({
+            success: true,
+            user,
+            token
+          })
         })
       })
-    }).catch(next)
+      .catch(next)
   }
 
   const error = new Error('All fields required')
@@ -46,36 +43,34 @@ router.post('/create-admin', (req, res, next) => {
 })
 
 router.post('/signup', (req, res, next) => {
-  const { email, username, password } = req.body
+  const { username, password } = req.body
 
-  if (email && username && password) {
+  if (username && password) {
     const userData = {
-      email,
       username,
-      password,
+      password
     }
-    return User.count({
-      $or: [
-        { email },
-        { username },
-      ],
-    }).exec().then(num => {
-      if (num > 0) {
-        const error = new Error('Duplicate user')
-        error.status = 400
-        return next(error)
-      }
-      User.create(userData, (err, user) => {
-        if (err) {
-          return next(err)
+    return User.count({ username })
+      .exec()
+      .then(num => {
+        if (num > 0) {
+          const error = new Error('Duplicate user')
+          error.status = 400
+          return next(error)
         }
-        const token = signJwt(user)
-        res.json({
-          success: true,
-          token,
-        })
-      }).catch(next)
-    }).catch(next)
+        User.create(userData, (err, user) => {
+          if (err) {
+            return next(err)
+          }
+          const token = signJwt(user)
+          res.json({
+            success: true,
+            user,
+            token
+          })
+        }).catch(next)
+      })
+      .catch(next)
   }
 
   const error = new Error('All fields required')
@@ -84,22 +79,22 @@ router.post('/signup', (req, res, next) => {
 })
 
 router.post('/login', (req, res, next) => {
-  const { email, password } = req.body
-  if (email && password) {
-    return User.authenticate(email, password, (error, user) => {
+  const { username, password } = req.body
+  if (username && password) {
+    return User.authenticate(username, password, (error, user) => {
       if (error) {
         return next(error)
       }
 
       if (!user) {
-        const error = new Error('Wrong email or password')
+        const error = new Error('Wrong username or password')
         error.status = 401
         return next(error)
       }
       const token = signJwt(user)
       return res.json({
         success: true,
-        token,
+        token
       })
     })
   }
@@ -107,6 +102,18 @@ router.post('/login', (req, res, next) => {
   const error = new Error('All fields required')
   error.status = 400
   return next(error)
+})
+
+router.get('/:token', (req, res, next) => {
+  const { token } = req.params
+  verifyJwt(token, (err, user) => {
+    if (err) {
+      res
+      .status(401)
+      .send({ success: false, message: 'Authentication failed' })
+    }
+    return res.json({ success: true, user })
+  })
 })
 
 module.exports = router
