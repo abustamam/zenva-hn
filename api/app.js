@@ -1,7 +1,6 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const mongoose = require('mongoose')
-const morgan = require('morgan')
 
 const auth = require('./routes/auth')
 const post = require('./routes/post')
@@ -21,7 +20,6 @@ db.once('open', () => {
 
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
-app.use(morgan('dev'))
 
 app.use('/api/auth', auth)
 app.use('/api/posts', post)

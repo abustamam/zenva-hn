@@ -41,7 +41,8 @@ const PostSchema = new Schema(
     timestamps: {
       createdAt: 'createdAt',
       updatedAt: 'updatedAt'
-    }
+    },
+    toObject: { virtuals: true }
   }
 )
 

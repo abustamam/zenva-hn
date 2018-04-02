@@ -11,30 +11,30 @@ router.post('/create-admin', (req, res, next) => {
     const userData = {
       username,
       password,
-      role: 'admin'
+      role: 'admin',
     }
     return User.count({ username })
-      .exec()
-      .then(num => {
-        if (num > 0) {
-          const error = new Error('Duplicate user')
-          error.status = 400
-          return next(error)
-        }
-        User.create(userData, (err, user) => {
-          if (err) {
-            return next(err)
-          }
+               .exec()
+               .then(num => {
+                 if (num > 0) {
+                   const error = new Error('Duplicate user')
+                   error.status = 400
+                   return next(error)
+                 }
+                 User.create(userData, (err, user) => {
+                   if (err) {
+                     return next(err)
+                   }
 
-          const token = signJwt(user)
-          res.json({
-            success: true,
-            user,
-            token
-          })
-        })
-      })
-      .catch(next)
+                   const token = signJwt(user)
+                   res.json({
+                     success: true,
+                     user,
+                     token,
+                   })
+                 })
+               })
+               .catch(next)
   }
 
   const error = new Error('All fields required')
@@ -48,29 +48,29 @@ router.post('/signup', (req, res, next) => {
   if (username && password) {
     const userData = {
       username,
-      password
+      password,
     }
     return User.count({ username })
-      .exec()
-      .then(num => {
-        if (num > 0) {
-          const error = new Error('Duplicate user')
-          error.status = 400
-          return next(error)
-        }
-        User.create(userData, (err, user) => {
-          if (err) {
-            return next(err)
-          }
-          const token = signJwt(user)
-          res.json({
-            success: true,
-            user,
-            token
-          })
-        }).catch(next)
-      })
-      .catch(next)
+               .exec()
+               .then(num => {
+                 if (num > 0) {
+                   const error = new Error('Duplicate user')
+                   error.status = 400
+                   return next(error)
+                 }
+                 User.create(userData, (err, user) => {
+                   if (err) {
+                     return next(err)
+                   }
+                   const token = signJwt(user)
+                   res.json({
+                     success: true,
+                     user,
+                     token,
+                   })
+                 })
+               })
+               .catch(next)
   }
 
   const error = new Error('All fields required')
@@ -94,7 +94,8 @@ router.post('/login', (req, res, next) => {
       const token = signJwt(user)
       return res.json({
         success: true,
-        token
+        token,
+        user,
       })
     })
   }
@@ -104,8 +105,12 @@ router.post('/login', (req, res, next) => {
   return next(error)
 })
 
-router.get('/:token', (req, res, next) => {
-  const { token } = req.params
+router.get('/', (req, res) => {
+  const bearer = req.headers.authorization
+  if (!bearer) {
+    return res.status(401).send('Missing Auth Header')
+  }
+  const token = bearer.trim().split(' ')[1]
   verifyJwt(token, (err, user) => {
     if (err) {
       res

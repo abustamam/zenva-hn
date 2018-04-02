@@ -6,30 +6,31 @@ const CommentSchema = new Schema(
     text: {
       type: String,
       required: true,
-      trim: true
+      trim: true,
     },
     author: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'User'
+      ref: 'User',
     },
     upVotes: [],
     downVotes: [],
     post: {
       type: Schema.Types.ObjectId,
       required: true,
-      ref: 'Post'
-    }
+      ref: 'Post',
+    },
   },
   {
     timestamps: {
       createdAt: 'createdAt',
-      updatedAt: 'updatedAt'
-    }
-  }
+      updatedAt: 'updatedAt',
+    },
+    toObject: { virtuals: true },
+  },
 )
 
-CommentSchema.virtual('voteScore').get(function() {
+CommentSchema.virtual('voteScore').get(function () {
   return this.upVotes - this.downVotes
 })
 

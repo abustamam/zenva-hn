@@ -1,14 +1,18 @@
 import cookie from 'js-cookie'
-import axios from 'axios'
 
-const token = cookie.get('token')
-
-axios.get(`/api/auth/${token}`)
-     .then(res => console.log(res.data.user))
-     .catch(err => console.log(err))
+import { LOGOUT_USER, RECEIVE_USER } from './actions'
 
 const initialState = {}
 
 export default (state = initialState, action) => {
-  return state
+  switch (action.type) {
+    case RECEIVE_USER:
+      const { user } = action
+      return { ...state, user }
+    case LOGOUT_USER:
+      cookie.remove('token')
+      return { ...state, user: null }
+    default:
+      return state
+  }
 }
