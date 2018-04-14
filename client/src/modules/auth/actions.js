@@ -8,32 +8,42 @@ export const LOGIN_USER = 'auth/LOGIN_USER'
 export const LOGOUT_USER = 'auth/LOGOUT_USER'
 export const UPDATE_TOKEN = 'auth/UPDATE_TOKEN'
 
-export const authUser = () => dispatch => fetchApi({ url: '/auth', method: 'GET' })
-.then(res => dispatch(receiveUser(res.data.user))).catch(err => console.log(err))
+export const authUser = () => dispatch =>
+  fetchApi({ url: '/auth', method: 'GET' })
+    .then(res => dispatch(receiveUser(res.data.user)))
+    .catch(err => console.log(err))
 
-export const loginUser = (data, cb) => dispatch => fetchApi({
-  url: '/auth/login',
-  data,
-  method: 'POST',
-}).then(res => {
-  updateToken(res.data.token)
-  dispatch(receiveUser(res.data.user))
-  cb(null)
-}).catch(cb)
+export const loginUser = (data, cb) => dispatch =>
+  fetchApi({
+    url: '/auth/login',
+    data,
+    method: 'POST'
+  })
+    .then(res => {
+      updateToken(res.data.token)
+      const { role, _id: userId, username } = res.data.user
+      dispatch(receiveUser({ role, userId, username }))
+      cb(null)
+    })
+    .catch(cb)
 
-export const signupUser = (data, cb) => dispatch => fetchApi({
-  url: '/auth/signup',
-  data,
-  method: 'POST',
-}).then(res => {
-  updateToken(res.data.token)
-  dispatch(receiveUser(res.data.user))
-  cb(null)
-}).catch(cb)
+export const signupUser = (data, cb) => dispatch =>
+  fetchApi({
+    url: '/auth/signup',
+    data,
+    method: 'POST'
+  })
+    .then(res => {
+      updateToken(res.data.token)
+      const { role, _id: userId, username } = res.data.user
+      dispatch(receiveUser({ role, userId, username }))
+      cb(null)
+    })
+    .catch(cb)
 
 export const receiveUser = user => ({
   type: RECEIVE_USER,
-  user,
+  user
 })
 
 export const logoutUser = () => ({ type: LOGOUT_USER })

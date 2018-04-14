@@ -16,10 +16,14 @@ class PostPage extends Component {
 
   render() {
     const { post } = this.props
-    return (!post) ? <Div>Loading</Div> : <Div>
-      <Post post={post} />
-      <CommentList postId={post._id} />
-    </Div>
+    return !post ? (
+      <Div>Loading</Div>
+    ) : (
+      <Div>
+        <Post post={post} />
+        <CommentList postId={post._id} />
+      </Div>
+    )
   }
 }
 

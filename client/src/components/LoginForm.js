@@ -14,8 +14,8 @@ class LoginForm extends Component {
             form.setFields({
               [`${type}-password`]: {
                 value: password,
-                errors: [new Error(err.response.data.message)],
-              },
+                errors: [new Error(err.response.data.message)]
+              }
             })
             return
           }
@@ -32,23 +32,23 @@ class LoginForm extends Component {
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator(`${type}-username`, {
-            rules: [{ required: true, message: 'Please input your username!' }],
+            rules: [{ required: true, message: 'Please input your username!' }]
           })(
             <Input
               prefix={<Icon type="user" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder="Username"
-            />,
+            />
           )}
         </Form.Item>
         <Form.Item>
           {getFieldDecorator(`${type}-password`, {
-            rules: [{ required: true, message: 'Please input your Password!' }],
+            rules: [{ required: true, message: 'Please input your Password!' }]
           })(
             <Input
               prefix={<Icon type="lock" style={{ color: 'rgba(0,0,0,.25)' }} />}
               type="password"
               placeholder="Password"
-            />,
+            />
           )}
         </Form.Item>
         <Form.Item>

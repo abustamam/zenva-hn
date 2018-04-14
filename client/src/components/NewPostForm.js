@@ -11,7 +11,6 @@ class NewPostForm extends Component {
           if (err) {
             return console.error(err)
           }
-          console.log(res.data.post)
           redirect(res.data.post._id)
         })
       }
@@ -25,12 +24,14 @@ class NewPostForm extends Component {
       <Form onSubmit={this.handleSubmit} className="login-form">
         <Form.Item>
           {getFieldDecorator('title', {
-            rules: [{ required: true, message: 'Please input title!' }],
+            rules: [{ required: true, message: 'Please input title!' }]
           })(
             <Input
-              prefix={<Icon type="tag-o" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={
+                <Icon type="tag-o" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
               placeholder="Title"
-            />,
+            />
           )}
         </Form.Item>
         <Form.Item>
@@ -38,16 +39,18 @@ class NewPostForm extends Component {
             <Input
               prefix={<Icon type="link" style={{ color: 'rgba(0,0,0,.25)' }} />}
               placeholder="URL"
-            />,
+            />
           )}
         </Form.Item>
         <div>OR</div>
         <Form.Item>
           {getFieldDecorator('text', {})(
             <Input
-              prefix={<Icon type="file-text" style={{ color: 'rgba(0,0,0,.25)' }} />}
+              prefix={
+                <Icon type="file-text" style={{ color: 'rgba(0,0,0,.25)' }} />
+              }
               placeholder="Text"
-            />,
+            />
           )}
         </Form.Item>
         <Form.Item>

@@ -4,7 +4,6 @@ import { LOGOUT_USER, RECEIVE_USER } from './actions'
 const token = cookie.get('token')
 const isLoggedIn = !!token
 
-
 const initialState = { user: {}, isLoggedIn }
 
 export default (state = initialState, action) => {

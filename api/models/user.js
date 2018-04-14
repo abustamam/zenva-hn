@@ -44,9 +44,9 @@ UserSchema.statics.authenticate = (username, password, cb) => {
       return cb(err)
     }
     bcrypt.compare(password, user.password, (err, result) => {
-      console.log(user.password, password, result)
-      if (result) {
+      console.log(password, user.password)
 
+      if (result) {
         return cb(null, user)
       }
       return cb(err)

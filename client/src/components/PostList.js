@@ -10,10 +10,15 @@ class PostList extends Component {
 
   render() {
     const { posts } = this.props
-    return <Div>
-      {(!posts) ? <Div>Loading</Div> :
-       <Div>{posts.map(post => <Post key={post._id} post={post} />)}</Div>}
-    </Div>
+    return (
+      <Div>
+        {!posts ? (
+          <Div>Loading</Div>
+        ) : (
+          <Div>{posts.map(post => <Post key={post._id} post={post} />)}</Div>
+        )}
+      </Div>
+    )
   }
 }
 

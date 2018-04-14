@@ -7,8 +7,6 @@ class NewCommentForm extends Component {
     const { form, handleSubmit, postId } = this.props
     form.validateFields((err, values) => {
       if (!err) {
-        console.log({ values, postId })
-
         handleSubmit({ ...values, postId }, (err, res) => {
           if (err) {
             return console.error(err)
@@ -26,14 +24,11 @@ class NewCommentForm extends Component {
       <Form onSubmit={this.handleSubmit}>
         <Form.Item>
           {getFieldDecorator('text', {
-            rules: [{ required: true, message: 'Please input a comment!' }],
+            rules: [{ required: true, message: 'Please input a comment!' }]
           })(<Input.TextArea rows={4} placeholder="Comment" />)}
         </Form.Item>
         <Form.Item>
-          <Button
-            type="primary"
-            htmlType="submit"
-          >
+          <Button type="primary" htmlType="submit">
             Add comment
           </Button>
         </Form.Item>

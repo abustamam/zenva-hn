@@ -29,5 +29,5 @@ const mapStateToProps = state => {
 export default connect(mapStateToProps, {
   requestPosts,
   voteComment,
-  requestComments,
+  requestComments
 })(CommentList)

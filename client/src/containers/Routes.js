@@ -5,7 +5,7 @@ import Routes from '../components/Routes'
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: state.auth.isLoggedIn,
+    isAuthenticated: state.auth.isLoggedIn
   }
 }
 
