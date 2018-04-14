@@ -84,6 +84,9 @@ router.delete('/:id', authJwt, (req, res, next) => {
   const { id } = req.params
   const { userId, role } = req.decoded
 
+  console.log({ id, userId })
+
+
   Post.findById(id)
     .exec()
     .then(post => {
@@ -97,7 +100,7 @@ router.delete('/:id', authJwt, (req, res, next) => {
           User.findById(post.author)
             .exec()
             .then(user => {
-              user.posts = removeEl(post._id)
+              user.posts = removeEl(user.posts, post._id)
               user.save()
               res.json({ success: true })
             })

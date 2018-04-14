@@ -6,35 +6,41 @@ const auth = require('./routes/auth')
 const post = require('./routes/post')
 const comment = require('./routes/comment')
 
-const app = express()
+const start = ({ app = express(), host = 'localhost', port = 3500, secret }) => {
+  mongoose.connect('mongodb://localhost/zenva-hn')
 
-const port = process.env.PORT || 3500
-mongoose.connect('mongodb://localhost/zenva-hn')
+  const db = mongoose.connection
 
-const db = mongoose.connection
+  db.on('error', console.error.bind(console, 'connection error:'))
+  db.once('open', () => {
+    // connected
+  })
 
-db.on('error', console.error.bind(console, 'connection error:'))
-db.once('open', () => {
-  // connected
-})
+  app.use(bodyParser.json())
+  app.use(bodyParser.urlencoded({ extended: false }))
 
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({ extended: false }))
+  app.use('/api/auth', auth)
+  app.use('/api/posts', post)
+  app.use('/api/comments', comment)
 
-app.use('/api/auth', auth)
-app.use('/api/posts', post)
-app.use('/api/comments', comment)
+  app.use((req, res, next) => {
+    const err = new Error('File Not found')
+    err.status = 404
+    next(err)
+  })
 
-app.use((req, res, next) => {
-  const err = new Error('File Not found')
-  err.status = 404
-  next(err)
-})
+  app.use((err, req, res, next) => {
+    res.status(err.status || 500).json({ message: err.message })
+  })
 
-app.use((err, req, res, next) => {
-  res.status(err.status || 500).json({ message: err.message })
-})
+  app.listen(port, () => {
+    const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
+    console.info(
+      `Server is running at ${boldBlue(`http://${host}:${port}/`)}`,
+    )
+  })
 
-app.listen(port, () => {
-  console.log('Express app listening on port 3500')
-})
+  return app
+}
+
+module.exports = { start }

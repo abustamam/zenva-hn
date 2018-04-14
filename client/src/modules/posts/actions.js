@@ -6,7 +6,6 @@ export const REQUEST_POST = 'posts/REQUEST_POST'
 export const RECEIVE_POST = 'posts/RECEIVE_POST'
 export const DELETE_POST_SUCCESS = 'posts/DELETE_POST_SUCCESS'
 export const VOTE_POST = 'posts/VOTE_POST'
-export const SUBMIT_POST = 'posts/SUBMIT_POST'
 
 export const requestPosts = () => dispatch => {
   dispatch({ type: REQUEST_POSTS })
@@ -51,7 +50,9 @@ export const submitPost = (data, cb = () => {}) => dispatch =>
     .then(res => cb(null, res))
     .catch(cb)
 
-export const deletePost = (postId, cb = () => {}) => dispatch =>
+export const deletePost = (postId, cb = () => {}) => dispatch =>{
+  console.log({ postId })
+
   fetchApi({
     url: `/posts/${postId}`,
     method: 'DELETE'
@@ -59,3 +60,4 @@ export const deletePost = (postId, cb = () => {}) => dispatch =>
     .then(() => dispatch({ type: DELETE_POST_SUCCESS, postId }))
     .then(() => cb(null))
     .catch(cb)
+}

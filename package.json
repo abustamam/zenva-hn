@@ -1,0 +1,23 @@
+{
+  "name": "zenva-hn-course",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "prod": "node ."
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abustamam/zenva-hn.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abustamam/zenva-hn/issues"
+  },
+  "homepage": "https://github.com/abustamam/zenva-hn#readme",
+  "dependencies": {
+    "express": "^4.16.3"
+  }
+}

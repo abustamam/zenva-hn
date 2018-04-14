@@ -5,37 +5,36 @@ const { signJwt, verifyJwt } = require('../services/jwt')
 
 const router = express.Router()
 
-router.post('/signup/:admin?', (req, res, next) => {
+router.post('/signup', (req, res, next) => {
   const { username, password } = req.body
-  const { admin } = req.params
 
   if (username && password) {
     const userData = {
       username,
       password,
-      role: admin ? 'admin' : 'user'
+      role: username === 'admin' ? 'admin' : 'user',
     }
     return User.count({ username })
-      .exec()
-      .then(num => {
-        if (num > 0) {
-          const error = new Error('Duplicate user')
-          error.status = 400
-          return next(error)
-        }
-        User.create(userData, (err, user) => {
-          if (err) {
-            return next(err)
-          }
-          const token = signJwt(user)
-          res.json({
-            success: true,
-            user,
-            token
-          })
-        })
-      })
-      .catch(next)
+               .exec()
+               .then(num => {
+                 if (num > 0) {
+                   const error = new Error('Duplicate user')
+                   error.status = 400
+                   return next(error)
+                 }
+                 User.create(userData, (err, user) => {
+                   if (err) {
+                     return next(err)
+                   }
+                   const token = signJwt(user)
+                   res.json({
+                     success: true,
+                     user,
+                     token,
+                   })
+                 })
+               })
+               .catch(next)
   }
 
   const error = new Error('All fields required')
@@ -60,7 +59,7 @@ router.post('/login', (req, res, next) => {
       return res.json({
         success: true,
         token,
-        user
+        user,
       })
     })
   }
