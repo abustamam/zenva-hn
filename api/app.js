@@ -10,9 +10,10 @@ const start = ({
   app = express(),
   host = 'localhost',
   port = 3500,
-  secret
+  dbUri = 'mongodb://localhost/27017',
+  secret,
 }) => {
-  mongoose.connect('mongodb://localhost/zenva-hn')
+  mongoose.connect(dbUri)
 
   const db = mongoose.connection
 
