@@ -4,7 +4,7 @@ import { logoutUser } from '../modules/auth/actions'
 
 const mapStateToProps = state => {
   return {
-    isAuthenticated: !!state.auth.user,
+    isAuthenticated: state.auth.isLoggedIn,
   }
 }
 

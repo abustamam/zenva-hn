@@ -4,6 +4,8 @@ export const REQUEST_POSTS = 'posts/REQUEST_POSTS'
 export const RECEIVE_POSTS = 'posts/RECEIVE_POSTS'
 export const REQUEST_POST = 'posts/REQUEST_POST'
 export const RECEIVE_POST = 'posts/RECEIVE_POST'
+export const DELETE_POST_SUCCESS = 'posts/DELETE_POST_SUCCESS'
+export const VOTE_POST = 'posts/VOTE_POST'
 export const SUBMIT_POST = 'posts/SUBMIT_POST'
 
 export const requestPosts = () => dispatch => {
@@ -12,16 +14,19 @@ export const requestPosts = () => dispatch => {
   .then(res => dispatch(receivePosts(res.data.posts)))
 }
 
-export const requestPost = postId => dispatch => {
-  console.log({ postId })
-
-  dispatch({ type: REQUEST_POSTS })
+export const requestPost = (postId, cb) => dispatch => {
+  dispatch({ type: REQUEST_POST })
   fetchApi({
     url: `/posts/${postId}`,
     method: 'GET',
   })
-  .then(res => dispatch(receivePost(res.data.post)))
+  .then(res => dispatch(receivePost(res.data.post))).then(() => cb(null)).catch(cb)
 }
+
+export const votePost = (id, value) => dispatch => fetchApi({
+  url: `/posts/${id}/${value === 1 ? 'upvote' : 'downvote'}`,
+  method: 'POST',
+}).then(res => dispatch(receivePost(res.data.post)))
 
 export const receivePosts = posts => ({
   type: RECEIVE_POSTS,
@@ -39,7 +44,7 @@ export const submitPost = (data, cb) => dispatch => fetchApi({
   method: 'POST',
 }).then(res => cb(null, res)).catch(cb)
 
-export const submitVote = (value) => dispatch => fetchApi({
-  url: `/posts/${value === 1 ? 'upvote' : 'downvote'}`,
-  method: 'POST'
-}).then(res => dispatch(requestPost(res.data.post._id)))
+export const deletePost = (postId, cb) => dispatch => fetchApi({
+  url: `/posts/${postId}`,
+  method: 'DELETE',
+}).then(() => dispatch({ type: DELETE_POST_SUCCESS, postId })).then(() => cb(null)).catch(cb)

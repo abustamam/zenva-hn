@@ -31,7 +31,9 @@ app.use((req, res, next) => {
   next(err)
 })
 
-app.use((err, req, res) => res.status(err.status || 500).json({ message: err.message }))
+app.use((err, req, res, next) => {
+  res.status(err.status || 500).json({ message: err.message })
+})
 
 app.listen(port, () => {
   console.log('Express app listening on port 3500')

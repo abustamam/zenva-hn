@@ -6,6 +6,7 @@ import PostList from '../containers/PostList'
 import PostPage from '../containers/PostPage'
 import Login from './LoginPage'
 import NewPostPage from './NewPostPage'
+import NotFoundPage from './NotFound'
 
 const PrivateRoute = ({ component: Component, ...rest }) => (
   <Route
@@ -30,6 +31,7 @@ const Routes = ({ isAuthenticated }) => {
         <Route path="/posts" exact component={PostList} />
         <Route path="/login" component={Login} />
         <Route path="/posts/:postId" exact component={PostPage} />
+        <Route path="/not-found" exact component={NotFoundPage} />
         <PrivateRoute
           path="/submit"
           isAuthenticated={isAuthenticated}

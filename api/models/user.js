@@ -8,29 +8,29 @@ const UserSchema = new Schema({
     type: String,
     unique: true,
     required: true,
-    trim: true
+    trim: true,
   },
   role: {
     type: String,
     required: true,
-    default: 'user'
+    default: 'user',
   },
   password: {
     type: String,
-    required: true
+    required: true,
   },
   posts: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Post'
-    }
+      ref: 'Post',
+    },
   ],
   comments: [
     {
       type: Schema.Types.ObjectId,
-      ref: 'Comment'
-    }
-  ]
+      ref: 'Comment',
+    },
+  ],
 })
 
 UserSchema.statics.authenticate = (username, password, cb) => {
@@ -44,15 +44,17 @@ UserSchema.statics.authenticate = (username, password, cb) => {
       return cb(err)
     }
     bcrypt.compare(password, user.password, (err, result) => {
+      console.log(user.password, password, result)
       if (result) {
+
         return cb(null, user)
       }
-      return cb()
+      return cb(err)
     })
   })
 }
 
-UserSchema.pre('save', function(next) {
+UserSchema.pre('save', function (next) {
   const user = this
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {

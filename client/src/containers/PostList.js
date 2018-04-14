@@ -3,9 +3,7 @@ import PostList from '../components/PostList'
 import { requestPosts } from '../modules/posts/actions'
 
 const mapStateToProps = state => {
-  console.log({ state })
-
-  const { posts: { posts, loading }, auth: { user } } = state
+  const { posts: { posts, loading } } = state
   // sort here
   const sortedPosts = Object.values(posts).sort((a, b) => {
     const dateA = a.createdAt
@@ -19,7 +17,7 @@ const mapStateToProps = state => {
     return 0
   })
 
-  return { posts: sortedPosts, user, loading }
+  return { posts: sortedPosts, loading }
 }
 
 export default connect(mapStateToProps, { requestPosts })(PostList)

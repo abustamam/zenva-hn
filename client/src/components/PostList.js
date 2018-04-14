@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Div } from 'glamorous'
 
-import Post from './Post'
+import Post from './../containers/Post'
 
 class PostList extends Component {
   componentDidMount() {
@@ -9,7 +9,7 @@ class PostList extends Component {
   }
 
   render() {
-    const { posts, loading } = this.props
+    const { posts } = this.props
     return <Div>
       {(!posts) ? <Div>Loading</Div> :
        <Div>{posts.map(post => <Post key={post._id} post={post} />)}</Div>}

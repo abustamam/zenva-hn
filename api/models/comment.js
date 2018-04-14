@@ -31,7 +31,7 @@ const CommentSchema = new Schema(
 )
 
 CommentSchema.virtual('voteScore').get(function () {
-  return this.upVotes - this.downVotes
+  return this.upVotes.length - this.downVotes.length
 })
 
 const Comment = mongoose.model('Comment', CommentSchema)

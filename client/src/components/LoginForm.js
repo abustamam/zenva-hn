@@ -11,6 +11,12 @@ class LoginForm extends Component {
         const password = values[`${type}-password`]
         handleSubmit({ username, password }, err => {
           if (err) {
+            form.setFields({
+              [`${type}-password`]: {
+                value: password,
+                errors: [new Error(err.response.data.message)],
+              },
+            })
             return
           }
           redirect()

@@ -9,7 +9,11 @@ const { authJwt } = require('../services/jwt')
 router.get('/', (req, res, next) => {
   Post.find({})
       .populate('author')
-      .populate('comments')
+      .populate({
+        path: 'comments', populate: {
+          path: 'author',
+        },
+      })
       .exec()
       .then(posts => res.json({ success: true, posts }))
       .catch(next)
@@ -19,9 +23,29 @@ router.get('/:id', (req, res, next) => {
   const { id } = req.params
   Post.findById(id)
       .populate('author')
-      .populate('comments')
+      .populate({
+        path: 'comments', populate: {
+          path: 'author',
+        },
+      })
       .exec()
-      .then(post => res.json({ success: true, post }))
+      .then(post => {
+        if (!post) return next(`Cannot find post ${id}`)
+        return res.json({ success: true, post })
+      })
+      .catch(next)
+})
+
+router.get('/:id/comments', (req, res, next) => {
+  const { id } = req.params
+  Post.findById(id)
+      .populate({
+        path: 'comments', populate: {
+          path: 'author',
+        },
+      })
+      .exec()
+      .then(({ comments }) => res.json({ success: true, comments }))
       .catch(next)
 })
 
@@ -54,12 +78,17 @@ router.post('/', authJwt, (req, res, next) => {
 router.delete('/:id', authJwt, (req, res, next) => {
   const { id } = req.params
   const { userId, role } = req.decoded
+
   Post.findById(id)
       .exec()
       .then(post => {
-        if (role !== 'admin' || userId !== post.author) {
+        console.log({ post, role })
+        if (role !== 'admin' && userId !== post.author) {
+          console.log('unauth!')
+
           return next('Unauthorized to do this')
         }
+
         post
         .remove()
         .then(() => res.json({ success: true }))
