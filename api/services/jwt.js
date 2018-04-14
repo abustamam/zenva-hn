@@ -2,8 +2,6 @@ const jwt = require('jsonwebtoken')
 
 const jwtSecret = process.env.JWT_SECRET
 
-console.log({ jwtSecret })
-
 const verifyJwt = (token, cb) => jwt.verify(token, jwtSecret, cb)
 
 const authJwt = (req, res, next) => {
@@ -33,14 +31,14 @@ const signJwt = user =>
     {
       userId: user._id,
       username: user.username,
-      role: user.role
+      role: user.role,
     },
     jwtSecret,
-    { expiresIn: '1d' }
+    { expiresIn: '1d' },
   )
 
 module.exports = {
   authJwt,
   signJwt,
-  verifyJwt
+  verifyJwt,
 }
