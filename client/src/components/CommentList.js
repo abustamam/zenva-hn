@@ -13,12 +13,7 @@ class CommentList extends Component {
   }
 
   render() {
-    const {
-      isLoggedIn,
-      comments,
-      postId,
-      loading,
-    } = this.props
+    const { isLoggedIn, comments, postId, loading } = this.props
     if (loading) {
       return <Div>Loading...</Div>
     }

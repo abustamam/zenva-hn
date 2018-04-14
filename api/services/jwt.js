@@ -4,7 +4,6 @@ const jwtSecret = process.env.JWT_SECRET
 
 console.log({ jwtSecret })
 
-
 const verifyJwt = (token, cb) => jwt.verify(token, jwtSecret, cb)
 
 const authJwt = (req, res, next) => {
@@ -16,9 +15,8 @@ const authJwt = (req, res, next) => {
   if (token) {
     verifyJwt(token, (err, decoded) => {
       if (err) {
-        res
-          .status(401)
-          .send({ success: false, message: 'Authentication failed' })
+        res.statusCode = 401
+        return next('Authentication failed')
       }
       req.decoded = decoded
       return next()
@@ -26,7 +24,8 @@ const authJwt = (req, res, next) => {
 
     return
   }
-  return res.status(403).send({ success: false, message: 'No token provided' })
+  res.statusCode = 403
+  return next('No token provided')
 }
 
 const signJwt = user =>
@@ -43,5 +42,5 @@ const signJwt = user =>
 module.exports = {
   authJwt,
   signJwt,
-  verifyJwt,
+  verifyJwt
 }

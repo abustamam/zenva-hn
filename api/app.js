@@ -6,7 +6,12 @@ const auth = require('./routes/auth')
 const post = require('./routes/post')
 const comment = require('./routes/comment')
 
-const start = ({ app = express(), host = 'localhost', port = 3500, secret }) => {
+const start = ({
+  app = express(),
+  host = 'localhost',
+  port = 3500,
+  secret
+}) => {
   mongoose.connect('mongodb://localhost/zenva-hn')
 
   const db = mongoose.connection
@@ -35,9 +40,7 @@ const start = ({ app = express(), host = 'localhost', port = 3500, secret }) => 
 
   app.listen(port, () => {
     const boldBlue = text => `\u001b[1m\u001b[34m${text}\u001b[39m\u001b[22m`
-    console.info(
-      `Server is running at ${boldBlue(`http://${host}:${port}/`)}`,
-    )
+    console.info(`Server is running at ${boldBlue(`http://${host}:${port}/`)}`)
   })
 
   return app

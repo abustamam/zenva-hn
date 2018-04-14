@@ -86,7 +86,6 @@ router.delete('/:id', authJwt, (req, res, next) => {
 
   console.log({ id, userId })
 
-
   Post.findById(id)
     .exec()
     .then(post => {

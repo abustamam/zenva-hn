@@ -7,5 +7,5 @@ const removeEl = (array, el) => {
 }
 
 module.exports = {
-  removeEl,
+  removeEl
 }

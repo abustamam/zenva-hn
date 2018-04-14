@@ -10,13 +10,13 @@ const { removeEl } = require('./../util')
 router.get('/:id', (req, res, next) => {
   const { id } = req.params
   Comment.findById(id)
-         .populate('author')
-         .populate('post')
-         .exec()
-         .then(comment => {
-           res.json({ success: true, comment })
-         })
-         .catch(next)
+    .populate('author')
+    .populate('post')
+    .exec()
+    .then(comment => {
+      res.json({ success: true, comment })
+    })
+    .catch(next)
 })
 
 router.post('/', authJwt, (req, res, next) => {
@@ -30,21 +30,21 @@ router.post('/', authJwt, (req, res, next) => {
       return next(err)
     }
     Post.findById(postId)
-        .exec()
-        .then(post => {
-          post.comments.push(comment._id)
-          post.save()
-          User.findById(userId)
-              .exec()
-              .then(user => {
-                user.comments.push(comment._id)
-                user.save()
-                res.json({
-                  success: true,
-                  comment,
-                })
-              })
-        })
+      .exec()
+      .then(post => {
+        post.comments.push(comment._id)
+        post.save()
+        User.findById(userId)
+          .exec()
+          .then(user => {
+            user.comments.push(comment._id)
+            user.save()
+            res.json({
+              success: true,
+              comment
+            })
+          })
+      })
   })
 })
 
@@ -52,34 +52,34 @@ router.delete('/:id', authJwt, (req, res, next) => {
   const { id } = req.params
   const { userId, role } = req.decoded
   Comment.findById(id)
-         .exec()
-         .then(comment => {
-           if (role !== 'admin' && userId !== comment.author) {
-             return next('Unauthorized to do this')
-           }
-           comment
-           .remove()
-           .then(() => {
-             Post.findById(comment.post)
-                 .exec()
-                 .then(post => {
-                   post.comments = removeEl(post.comments, comment._id)
-                   post.save()
-                   User.findById(comment.author)
-                       .exec()
-                       .then(user => {
-                         user.comments = removeEl(user.comments, comment._id)
-                         user.save()
+    .exec()
+    .then(comment => {
+      if (role !== 'admin' && userId !== comment.author) {
+        return next('Unauthorized to do this')
+      }
+      comment
+        .remove()
+        .then(() => {
+          Post.findById(comment.post)
+            .exec()
+            .then(post => {
+              post.comments = removeEl(post.comments, comment._id)
+              post.save()
+              User.findById(comment.author)
+                .exec()
+                .then(user => {
+                  user.comments = removeEl(user.comments, comment._id)
+                  user.save()
 
-                         res.json({ success: true, postId: comment.post })
-                       })
-                       .catch(next)
-                 })
-                 .catch(next)
-           })
-           .catch(next)
-         })
-         .catch(next)
+                  res.json({ success: true, postId: comment.post })
+                })
+                .catch(next)
+            })
+            .catch(next)
+        })
+        .catch(next)
+    })
+    .catch(next)
 })
 
 router.post('/:id/upvote', authJwt, (req, res, next) => {
@@ -87,20 +87,20 @@ router.post('/:id/upvote', authJwt, (req, res, next) => {
   const { userId } = req.decoded
 
   Comment.findById(id)
-         .exec()
-         .then(comment => {
-           if (comment.upVotes.includes(userId)) {
-             return next('Cannot vote twice on the same item')
-           }
-           comment.upVotes.push(userId)
-           comment.downVotes = removeEl(comment.downVotes, userId)
-           comment.save()
-           res.json({
-             success: true,
-             comment,
-           })
-         })
-         .catch(next)
+    .exec()
+    .then(comment => {
+      if (comment.upVotes.includes(userId)) {
+        return next('Cannot vote twice on the same item')
+      }
+      comment.upVotes.push(userId)
+      comment.downVotes = removeEl(comment.downVotes, userId)
+      comment.save()
+      res.json({
+        success: true,
+        comment
+      })
+    })
+    .catch(next)
 })
 
 router.post('/:id/downvote', authJwt, (req, res, next) => {
@@ -108,21 +108,21 @@ router.post('/:id/downvote', authJwt, (req, res, next) => {
   const { userId } = req.decoded
 
   Comment.findById(id)
-         .exec()
-         .then(comment => {
-           if (comment.downVotes.includes(userId)) {
-             return next('Cannot vote twice on the same item')
-           }
-           comment.downVotes.push(userId)
-           comment.upVotes = removeEl(comment.upVotes, userId)
+    .exec()
+    .then(comment => {
+      if (comment.downVotes.includes(userId)) {
+        return next('Cannot vote twice on the same item')
+      }
+      comment.downVotes.push(userId)
+      comment.upVotes = removeEl(comment.upVotes, userId)
 
-           comment.save()
-           res.json({
-             success: true,
-             comment,
-           })
-         })
-         .catch(next)
+      comment.save()
+      res.json({
+        success: true,
+        comment
+      })
+    })
+    .catch(next)
 })
 
 module.exports = router

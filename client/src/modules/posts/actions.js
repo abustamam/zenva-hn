@@ -50,7 +50,7 @@ export const submitPost = (data, cb = () => {}) => dispatch =>
     .then(res => cb(null, res))
     .catch(cb)
 
-export const deletePost = (postId, cb = () => {}) => dispatch =>{
+export const deletePost = (postId, cb = () => {}) => dispatch => {
   console.log({ postId })
 
   fetchApi({

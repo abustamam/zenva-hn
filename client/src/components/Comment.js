@@ -13,16 +13,13 @@ const showDeleteConfirm = (commentId, username, deleteComment) => {
     okType: 'danger',
     cancelText: 'No',
     onOk() {
-      deleteComment(commentId, (err, res) => {
-
-      })
-    },
+      deleteComment(commentId, (err, res) => {})
+    }
   })
 }
 
-
 const DeleteButton = glam.span({
-  cursor: 'pointer',
+  cursor: 'pointer'
 })
 
 const VoteIcon = glam(Icon)(
@@ -30,18 +27,25 @@ const VoteIcon = glam(Icon)(
     color: 'rgba(0,0,0,.25)',
     cursor: 'pointer',
     ':hover': {
-      color: 'rgba(0,0,0,.5)',
-    },
+      color: 'rgba(0,0,0,.5)'
+    }
   },
   ({ inactive }) =>
     inactive && {
       color: 'white',
       cursor: 'not-allowed',
-      ':hover': { color: 'white' },
-    },
+      ':hover': { color: 'white' }
+    }
 )
 
-const Comment = ({ comment, canDelete, voteComment, isLoggedIn, user, deleteComment }) => {
+const Comment = ({
+  comment,
+  canDelete,
+  voteComment,
+  isLoggedIn,
+  user,
+  deleteComment
+}) => {
   const {
     upVotes,
     downVotes,
@@ -49,7 +53,7 @@ const Comment = ({ comment, canDelete, voteComment, isLoggedIn, user, deleteComm
     createdAt,
     text,
     voteScore,
-    _id: commentId,
+    _id: commentId
   } = comment
   const { userId } = user
   return (
@@ -57,7 +61,7 @@ const Comment = ({ comment, canDelete, voteComment, isLoggedIn, user, deleteComm
       css={{
         marginBottom: 30,
         display: 'flex',
-        alignItems: 'flex-start',
+        alignItems: 'flex-start'
       }}
     >
       {isLoggedIn && (
@@ -65,7 +69,7 @@ const Comment = ({ comment, canDelete, voteComment, isLoggedIn, user, deleteComm
           css={{
             display: 'flex',
             flexDirection: 'column',
-            marginRight: 10,
+            marginRight: 10
           }}
         >
           <VoteIcon
@@ -81,29 +85,29 @@ const Comment = ({ comment, canDelete, voteComment, isLoggedIn, user, deleteComm
         </Div>
       )}
       <Div>
-        <Span css={{ fontWeight: 'bolder' }}>{author.username}</Span>{' '}
-        |
+        <Span css={{ fontWeight: 'bolder' }}>{author.username}</Span> |
         <Span
           css={{
             fontWeight: 'light',
-            fontSize: 11,
+            fontSize: 11
           }}
         >
-                    {' '}
-          {voteScore} points{' '}
-          {DateTime.fromISO(createdAt).toLocaleString()}
+          {' '}
+          {voteScore} points {DateTime.fromISO(createdAt).toLocaleString()}
           {canDelete && (
             <Span>
               {' '}
               |{' '}
               <DeleteButton
-                onClick={() => showDeleteConfirm(commentId, author.username, deleteComment)}
+                onClick={() =>
+                  showDeleteConfirm(commentId, author.username, deleteComment)
+                }
               >
                 Delete
               </DeleteButton>
             </Span>
           )}
-                  </Span>
+        </Span>
         <Div>{text}</Div>
       </Div>
     </Div>
