@@ -20,7 +20,7 @@ const showDeleteConfirm = (postId, title, deletePost, redirect) => {
         }
         redirect('/')
       })
-    }
+    },
   })
 }
 
@@ -29,19 +29,19 @@ const VoteIcon = glam(Icon)(
     color: 'rgba(0,0,0,.25)',
     cursor: 'pointer',
     ':hover': {
-      color: 'rgba(0,0,0,.5)'
-    }
+      color: 'rgba(0,0,0,.5)',
+    },
   },
   ({ inactive }) =>
     inactive && {
       color: 'white',
       cursor: 'not-allowed',
-      ':hover': { color: 'white' }
-    }
+      ':hover': { color: 'white' },
+    },
 )
 
 const DeleteButton = glam.span({
-  cursor: 'pointer'
+  cursor: 'pointer',
 })
 
 const Post = ({
@@ -66,7 +66,7 @@ const Post = ({
     author,
     text,
     comments,
-    _id: postId
+    _id: postId,
   } = post
   const postUrl = `/posts/${postId}`
   const { userId, role } = user
@@ -111,9 +111,7 @@ const Post = ({
             </Span>
           )}
         </Div>
-        {showText && text && <Div>
-          text
-        </Div>}
+        {showText && text && <Div>{text}</Div>}
       </Div>
     </Div>
   )
