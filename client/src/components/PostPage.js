@@ -20,7 +20,7 @@ class PostPage extends Component {
       <Div>Loading</Div>
     ) : (
       <Div>
-        <Post post={post} />
+        <Post post={post} showText />
         <CommentList postId={post._id} />
       </Div>
     )

@@ -52,6 +52,7 @@ const Post = ({
   user,
   deletePost,
   history,
+  showText,
   ...props
 }) => {
   const redirect = history.push
@@ -63,6 +64,7 @@ const Post = ({
     createdAt,
     title,
     author,
+    text,
     comments,
     _id: postId
   } = post
@@ -109,6 +111,9 @@ const Post = ({
             </Span>
           )}
         </Div>
+        {showText && text && <Div>
+          text
+        </Div>}
       </Div>
     </Div>
   )
