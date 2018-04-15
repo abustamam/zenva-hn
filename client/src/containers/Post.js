@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import { compose } from 'redux'
 import { deletePost, votePost } from '../modules/posts/actions'
 
-const mapStateToProps = ({ posts: { loading }, auth: { user }, isLoggedIn }) => ({
+const mapStateToProps = ({ posts: { loading }, auth: { user, isLoggedIn } }) => ({
   isLoggedIn,
   user,
   loading,
