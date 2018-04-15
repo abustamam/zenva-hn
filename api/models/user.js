@@ -56,6 +56,9 @@ UserSchema.statics.authenticate = (username, password, cb) => {
 
 UserSchema.pre('save', function(next) {
   const user = this
+  // only hash the password if it has been modified or is new
+  if (!user.isModified('password')) return next()
+
   bcrypt.hash(user.password, 10, (err, hash) => {
     if (err) {
       return next(err)
